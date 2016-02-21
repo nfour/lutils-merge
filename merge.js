@@ -76,12 +76,18 @@ function parseOptions(args) {
     }
 
     args = Array.prototype.slice.call(args)
+    var lastArg = args[ args.length - 1 ]
+
+    if ( typeOf.Function(lastArg) ) {
+        options.tests.push(lastArg)
+        args.pop()
+    }
 
     if ( typeOf.Array(args[0]) ) {
         if ( args[1] ) {
             options.depth = args[1].depth || options.depth
             options.types = castTypes( args[1].types || options.types )
-            options.tests = [ args[1].test ]
+            if ( args[1].test ) options.tests.push(args[1].test)
         }
 
         options.objects = args[0]
