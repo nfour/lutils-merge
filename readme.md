@@ -24,17 +24,25 @@ var obj3 = { e: function() {} }
 merge(obj1, obj2, obj3)
 /*
 	{
-		a: 2, b: { c: 1, d: 2 },
+		a: 2,
+		b: { c: 1, d: 2 },
 		e: function() {}
 	}
 */
 
 // Use options to customize merge behaviour
 merge([
-	{ a: { c: 1 } }, { a: { b: 2 }, d: 1 }
+	{ a: { c: 1 } },
+	{
+		a: { b: 2 },
+		d: 1
+	}
 ], { depth: 1 })
 /*
-	{ a: { b: 2 }, d: 1 }
+	{
+		a: { b: 2 },
+		d: 1
+	}
 */
 ```
 
@@ -44,7 +52,10 @@ Merges all objects into first object only if there **is** a key match.
 ```js
 merge.white(
 	{ a: 1 },
-	{ a: 2, b: 2 }
+	{
+		a: 2,
+		b: 2
+	}
 )
 /*
 	{ a: 2 }
