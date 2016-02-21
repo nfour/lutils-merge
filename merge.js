@@ -1,16 +1,8 @@
-// var typeOf = require('lutils-typeof')
 var typeOf = require('lutils-typeof')
 
-/*
-    Merge the second object into the first recursively until depth is reached for each property.
-
-    @param obj1 {Object}
-    @param obj2 {Object} Merged into obj1
-    @param depth {Number}
-    @param types {Array} Array of types to iterate over. Defaults to ['object']
-    @return obj1
-*/
-
+/**
+ *  Merges objects together
+ */
 var merge = function() {
     var options = parseOptions(arguments)
 
@@ -18,6 +10,10 @@ var merge = function() {
 
     return reducer(options)
 }
+
+/**
+ *  Merges objects together, but only when keys dont match
+ */
 
 merge.black = function() {
     var options = parseOptions(arguments)
@@ -27,6 +23,9 @@ merge.black = function() {
     return reducer(options)
 }
 
+/**
+ *  Merges objects together, but only when keys match
+ */
 merge.white = function() {
     var options = parseOptions(arguments)
 
