@@ -4,7 +4,7 @@ var typeOf = require('lutils-typeof')
  *  Merges objects together
  */
 var merge = function() {
-    var options = parseOptions(arguments)
+    var options = parseArguments(arguments)
 
     options.tests.unshift(merge.tests.merge)
 
@@ -14,9 +14,8 @@ var merge = function() {
 /**
  *  Merges objects together, but only when keys dont match
  */
-
 merge.black = function() {
-    var options = parseOptions(arguments)
+    var options = parseArguments(arguments)
 
     options.tests.unshift(merge.tests.black)
 
@@ -27,7 +26,7 @@ merge.black = function() {
  *  Merges objects together, but only when keys match
  */
 merge.white = function() {
-    var options = parseOptions(arguments)
+    var options = parseArguments(arguments)
 
     options.reversed = true
     options.tests.unshift(merge.tests.white)
@@ -67,7 +66,15 @@ function reducer(options) {
     }, options.objects[0])
 }
 
-function parseOptions(args) {
+/**
+ *  Parses `arguments` and generates an options config object
+ *
+ *  @param     {arguments}    args
+ *
+ *  @return    {Object}       options
+ */
+
+function parseArguments(args) {
     var options = {
         depth: 8,
         types: { object: true, array: true },
@@ -84,7 +91,7 @@ function parseOptions(args) {
 
     if ( typeOf.Array(args[0]) ) {
         if ( args[1] ) {
-            options.depth = args[1].depth || options.depth
+            options.depth = args[1].depth !== undefined ? args[1].depth : options.depth
             options.types = castTypes( args[1].types || options.types )
             if ( args[1].test ) options.tests.push(args[1].test)
         }
@@ -98,17 +105,17 @@ function parseOptions(args) {
 }
 
 /**
- *  Iterates over two objects based on supplied options
+ *  Mutates `obj1` based on `options` recursively
  *
  *  @param     {Object}    obj1
  *  @param     {Object}    obj2
  *  @param     {Number}    depth
  *  @param     {Object}    options
  *
- *  @return    {Object}
+ *  @return    {Object}    obj1
  */
 function iterate(obj1, obj2, depth, options) {
-    if ( --depth <= 0 ) return obj1
+    if ( --depth < 0 ) return obj1
 
     var iterated = options.reversed ? obj1 : obj2
 
@@ -148,6 +155,15 @@ function iterate(obj1, obj2, depth, options) {
     return obj1
 }
 
+/**
+ *  Runs each function in `tests`, returning false if any return falsy
+ *
+ *  @param     {Array}     tests
+ *  @param     {Object}    options
+ *
+ *  @return    {Boolean}
+ */
+
 function runTests(tests, options) {
     for ( var i in tests )
         if ( ! tests[i](options) ) return false
@@ -155,8 +171,16 @@ function runTests(tests, options) {
     return true
 }
 
+/**
+ *  Casts `types` to a hash object from an array of type strings
+ *
+ *  @param     {mixed}    types
+ *
+ *  @return    {Object}
+ */
+
 function castTypes(types) {
-    if ( typeOf.Object( types ) ) return types
+    if ( typeOf.Object(types) ) return types
 
     return types.reduce(function(hash, key) { hash[key] = true; return hash }, {})
 }

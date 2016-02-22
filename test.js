@@ -2,6 +2,10 @@ var merge  = require('./merge')
 var typeOf = require('lutils-typeof')
 
 exports["merge"] = function(test) {
+    //
+    // Basic merges
+    //
+
     var expected = {
         a: { b: {} },
         c: { },
@@ -13,8 +17,8 @@ exports["merge"] = function(test) {
     )
 
     test.deepEqual(expected, merged)
-    test.ok(merged.c === expected.c)
-    test.ok(merged.d === 2)
+    test.equal(merged.c, expected.c)
+    test.equal(merged.d, 2)
 
     var merged2 = merge(
         { c: 'overwriteMe', d: 'overwriteMe' },
@@ -22,11 +26,45 @@ exports["merge"] = function(test) {
         { a: { x: 1, b: 2 } }
     )
 
-    test.ok(merged2.c === 1)
-    test.ok(merged2.d === 1)
-    test.ok(merged2.a.x === 1)
-    test.ok(merged2.a.b === 2)
-    test.ok(merged2.f === 1)
+    test.equal(merged2.c, 1)
+    test.equal(merged2.d, 1)
+    test.equal(merged2.a.x, 1)
+    test.equal(merged2.a.b, 2)
+    test.equal(merged2.f, 1)
+
+    //
+    // Basic Merge depth test
+    //
+
+    var merged_basic = {
+        a: { b: 1 }
+    }
+
+    merge([merged_basic, { a: 1 }], { depth: 0 })
+    test.notEqual(merged_basic.a, 1, "basic depth test of 0")
+
+    merge([merged_basic, { a: 1 }], { depth: 1 })
+    test.equal(merged_basic.a, 1, "basic depth test of 1")
+
+    //
+    // Merge depth test
+    //
+    
+    var merged3 = {
+        a: { b: { c: 1 } }
+    }
+
+    var merged3_ab = merged3.a.b
+
+    merge([
+        merged3,
+        {
+            a: { b: { c: 2 } }
+        },
+    ], { depth: 2 })
+
+    test.equal(merged3.a.b.c, 1, "same value")
+    test.equal(merged3.a.b, merged3_ab, "same object reference")
 
     test.done()
 }
