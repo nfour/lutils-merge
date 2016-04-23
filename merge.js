@@ -4,34 +4,34 @@ var typeOf = require('lutils-typeof')
  *  Merges objects together
  */
 var merge = function() {
-    var options = parseArguments(arguments)
+    var options = _parseArguments(arguments)
 
     options.tests.unshift(merge.tests.merge)
 
-    return reducer(options)
+    return _reducer(options)
 }
 
 /**
  *  Merges objects together, but only when keys dont match
  */
 merge.black = function() {
-    var options = parseArguments(arguments)
+    var options = _parseArguments(arguments)
 
     options.tests.unshift(merge.tests.black)
 
-    return reducer(options)
+    return _reducer(options)
 }
 
 /**
  *  Merges objects together, but only when keys match
  */
 merge.white = function() {
-    var options = parseArguments(arguments)
+    var options = _parseArguments(arguments)
 
     options.reversed = true
     options.tests.unshift(merge.tests.white)
 
-    return reducer(options)
+    return _reducer(options)
 }
 
 merge.tests = {
@@ -60,10 +60,14 @@ module.exports = merge
 //
 
 
-function reducer(options) {
-    return options.objects.slice(1).reduce(function(target, obj) {
-        return iterate(target, obj, options.depth, options)
-    }, options.objects[0])
+function _reducer(options) {
+    var target = options.objects[0]
+    var len    = options.objects.length
+
+    for ( var i = 1; i < len; ++i )
+        _iterate(target, options.objects[i], options.depth, options)
+
+    return target
 }
 
 /**
@@ -74,7 +78,7 @@ function reducer(options) {
  *  @return    {Object}       options
  */
 
-function parseArguments(args) {
+function _parseArguments(args) {
     var options = {
         depth: 8,
         types: { object: true, array: true },
@@ -92,7 +96,7 @@ function parseArguments(args) {
     if ( typeOf.Array(args[0]) ) {
         if ( args[1] ) {
             options.depth = args[1].depth !== undefined ? args[1].depth : options.depth
-            options.types = castTypes( args[1].types || options.types )
+            options.types = _castTypes( args[1].types || options.types )
             if ( args[1].test ) options.tests.push(args[1].test)
         }
 
@@ -114,7 +118,7 @@ function parseArguments(args) {
  *
  *  @return    {Object}    obj1
  */
-function iterate(obj1, obj2, depth, options) {
+function _iterate(obj1, obj2, depth, options) {
     if ( --depth < 0 ) return obj1
 
     var iterated = options.reversed ? obj1 : obj2
@@ -141,12 +145,12 @@ function iterate(obj1, obj2, depth, options) {
             ( obj1Type in options.types)
         ) {
             testOptions.recursing = true
-            if ( ! runTests(options.tests, testOptions) ) continue
+            if ( ! _runTests(options.tests, testOptions) ) continue
 
-            iterate(obj1[key], obj2[key], depth, options)
+            _iterate(obj1[key], obj2[key], depth, options)
         } else {
             testOptions.assigning = true
-            if ( ! runTests(options.tests, testOptions) ) continue
+            if ( ! _runTests(options.tests, testOptions) ) continue
 
             obj1[key] = obj2[key]
         }
@@ -164,7 +168,7 @@ function iterate(obj1, obj2, depth, options) {
  *  @return    {Boolean}
  */
 
-function runTests(tests, options) {
+function _runTests(tests, options) {
     for ( var i in tests )
         if ( ! tests[i](options) ) return false
 
@@ -179,7 +183,7 @@ function runTests(tests, options) {
  *  @return    {Object}
  */
 
-function castTypes(types) {
+function _castTypes(types) {
     if ( typeOf.Object(types) ) return types
 
     return types.reduce(function(hash, key) { hash[key] = true; return hash }, {})
