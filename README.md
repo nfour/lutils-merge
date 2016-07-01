@@ -1,24 +1,24 @@
 # merge `lutils-merge`
-Merge javascript objects recursively
+Merge javascript objects recursively.
+
+`npm install lutils-merge`
+
+## API
 
 `merge`, `merge.white`, `merge.black` supports these patterns:
 ```js
 merge(obj1, obj2, obj3, ...)
 merge([obj1, obj2, obj3, ...], options)
-merge(obj1, obj2, obj3, ..., function(params) {
-	return params.key !== 'keyIReallyDontWant'
-})
+merge(obj1, obj2, obj3, ..., (params) => params.key !== 'keyIReallyDontWant' )
 ```
 
-## API
-
-### `merge()`
+### `merge([target], [object], [...[object]])`
 Merges all objects into first object.
 
 ```js
-var obj1 = { a: 1, b: { c: 1 } }
-var obj2 = { a: 2, b: { d: 2 } }
-var obj3 = { e: function() {} }
+const obj1 = { a: 1, b: { c: 1 } }
+const obj2 = { a: 2, b: { d: 2 } }
+const obj3 = { e: () => {} }
 
 // Merges objects obj2 then obj3 into obj1
 merge(obj1, obj2, obj3)
@@ -30,7 +30,9 @@ merge(obj1, obj2, obj3)
 	}
 */
 
-// Use options to customize merge behaviour
+// Use options to customize merge behaviour.
+// The first argument is an array of objects,
+// and the second is the options object.
 merge([
 	{ a: { c: 1 } },
 	{
@@ -96,13 +98,13 @@ merge.black(
 When merging, a test function can be specified in two ways:
 
 ```js
-merge(obj1, obj2, function() {})
-merge([obj1, obj2], { test: function() {} })
+merge(obj1, obj2, () => {})
+merge([obj1, obj2], { test: () => {} })
 ```
 
 The test function is supplied paramaters for each iteration through the merge.
 ```js
-merge(obj1, obj2, function(params) {
+merge(obj1, obj2, (params) => {
 	params.iterated // The object being iterated over
 	params.key // The key being iterated over in `interated`
 	params.obj1 // The object being mutated
