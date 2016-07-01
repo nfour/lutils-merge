@@ -3,7 +3,7 @@ var typeOf = require('lutils-typeof')
 /**
  *  Merges objects together
  */
-var merge = function() {
+function merge() {
     var options = _parseArguments(arguments)
 
     options.tests.unshift(merge.tests.merge)
@@ -14,7 +14,7 @@ var merge = function() {
 /**
  *  Merges objects together, but only when keys dont match
  */
-merge.black = function() {
+merge.black = function mergeBlack() {
     var options = _parseArguments(arguments)
 
     options.tests.unshift(merge.tests.black)
@@ -25,7 +25,7 @@ merge.black = function() {
 /**
  *  Merges objects together, but only when keys match
  */
-merge.white = function() {
+merge.white = function mergeWhite() {
     var options = _parseArguments(arguments)
 
     options.reversed = true
@@ -77,7 +77,6 @@ function _reducer(options) {
  *
  *  @return    {Object}       options
  */
-
 function _parseArguments(args) {
     var options = {
         depth: 8,
@@ -167,7 +166,6 @@ function _iterate(obj1, obj2, depth, options) {
  *
  *  @return    {Boolean}
  */
-
 function _runTests(tests, options) {
     for ( var i in tests )
         if ( ! tests[i](options) ) return false
@@ -182,7 +180,6 @@ function _runTests(tests, options) {
  *
  *  @return    {Object}
  */
-
 function _castTypes(types) {
     if ( typeOf.Object(types) ) return types
 
