@@ -85,17 +85,19 @@ function _parseArguments(args) {
     }
 
     args = Array.prototype.slice.call(args)
-    var lastArg = args[ args.length - 1 ]
-
-    if ( typeOf.Function(lastArg) ) {
-        options.tests.push(lastArg)
-        args.pop()
-    }
 
     if ( typeOf.Array(args[0]) ) {
+        var lastArg = args[ args.length - 1 ]
+
+        if ( typeOf.Function(lastArg) ) {
+            options.tests.push(lastArg)
+            args.pop()
+        }
+
         if ( args[1] ) {
             options.depth = args[1].depth !== undefined ? args[1].depth : options.depth
             options.types = _castTypes( args[1].types || options.types )
+
             if ( args[1].test ) options.tests.push(args[1].test)
         }
 

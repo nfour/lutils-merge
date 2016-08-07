@@ -49,7 +49,7 @@ exports["merge"] = function(test) {
     //
     // Merge depth test
     //
-    
+
     var merged3 = {
         a: { b: { c: 1 } }
     }
@@ -88,5 +88,23 @@ exports["merge.black"] = function(test) {
     test.ok(obj1.a !== obj2.a)
     test.ok(obj1.a.ignored === true)
     test.ok(obj1.a.notIgnored === true)
+    test.done()
+}
+
+exports["Can be called in all ways"] = function(test) {
+    var obj1 = { a: 1 }
+    var obj2 = { b: 1 }
+
+    merge([obj1, obj2], function() { return true })
+
+    test.ok(obj1.b === 1)
+
+    obj1 = { a: 1 }
+    obj2 = { b: 1 }
+
+    merge([obj1, obj2], { depth: 3 }, function() { return false })
+
+    test.ok(obj1.b === undefined)
+
     test.done()
 }

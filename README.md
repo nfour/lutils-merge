@@ -9,14 +9,15 @@ Merge javascript objects recursively.
 ```js
 merge(obj1, obj2, obj3, ...)
 merge([obj1, obj2, obj3, ...], options)
-merge(obj1, obj2, obj3, ..., (params) => params.key !== 'keyIReallyDontWant' )
+merge([obj1, obj2, obj3, ...], ({ key }) => key !== 'keyIReallyDontWant' )
+merge([obj1, obj2, obj3, ...], options, ({ key }) => key !== 'keyIReallyDontWant' )
 ```
 
 ### `merge([target], [object], [...[object]])`
 Merges all objects into first object.
 
 ```js
-const obj1 = { a: 1, b: { c: 1 } }
+const obj1 = { a: 1, b: { c: 1 }, e: 3 }
 const obj2 = { a: 2, b: { d: 2 } }
 const obj3 = { e: () => {} }
 
@@ -26,7 +27,7 @@ merge(obj1, obj2, obj3)
 	{
 		a: 2,
 		b: { c: 1, d: 2 },
-		e: function() {}
+		e: () => {}
 	}
 */
 
@@ -98,13 +99,13 @@ merge.black(
 When merging, a test function can be specified in two ways:
 
 ```js
-merge(obj1, obj2, () => {})
+merge([obj1, obj2], () => {})
 merge([obj1, obj2], { test: () => {} })
 ```
 
 The test function is supplied paramaters for each iteration through the merge.
 ```js
-merge(obj1, obj2, (params) => {
+merge([obj1, obj2], (params) => {
 	params.iterated // The object being iterated over
 	params.key // The key being iterated over in `interated`
 	params.obj1 // The object being mutated

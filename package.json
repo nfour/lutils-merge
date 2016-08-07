@@ -1,7 +1,7 @@
 {
     "name"        : "lutils-merge",
     "description" : "Merge javascript objects recursively",
-    "version"     : "0.1.4",
+    "version"     : "0.2.0",
     "author"      : { "name": "nfour" },
     "repository"  : {
         "type" : "git",
