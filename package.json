@@ -1,25 +1,35 @@
 {
-    "name"        : "lutils-merge",
-    "description" : "Merge javascript objects recursively",
-    "version"     : "0.2.2",
-    "author"      : { "name": "nfour" },
-    "repository"  : {
-        "type" : "git",
-        "url"  : "https://github.com/nfour/lutils-merge"
-    },
-
-    "scripts": {
-        "test"       : "nodeunit ./test.js",
-        "prepublish" : "npm run test"
-    },
-
-    "main": "./merge",
-
-    "dependencies": {
-        "lutils-typeof" : "~0.2.0"
-    },
-    "devDependencies": {
-        "nodeunit"      : "^0.9.0"
-    },
-    "keywords": [ "merge", "recursive", "assign", "deep" ]
+  "name": "lutils-merge",
+  "description": "Merge javascript objects recursively",
+  "version": "0.2.6",
+  "author": {
+    "name": "nfour"
+  },
+  "files": [
+    "merge.js",
+    "merge.d.ts"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/nfour/lutils-merge"
+  },
+  "scripts": {
+    "test": "nodeunit ./test.js",
+    "prepublish": "npm run test"
+  },
+  "main": "./merge",
+  "typings": "./merge.d.ts",
+  "dependencies": {
+    "lutils-typeof": "~0.2.0"
+  },
+  "devDependencies": {
+    "nodeunit": "^0.9.0"
+  },
+  "keywords": [
+    "merge",
+    "object",
+    "recursive",
+    "assign",
+    "deep"
+  ]
 }
